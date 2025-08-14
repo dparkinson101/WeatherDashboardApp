@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd build
+mkdir -p build
+cd build || echo "Error: Build Folder Doesn't Exist" | exit -1
 
 # Clean up old build
 rm -rf CMakeCache.txt CMakeFiles 

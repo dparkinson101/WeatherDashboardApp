@@ -3,13 +3,10 @@
 # Navigate to the build directory
 BUILD_DIR="build"
 
-# Check if the build directory exists, if not, create it
-if [ ! -d "$BUILD_DIR" ]; then
-    mkdir "$BUILD_DIR"
-fi
+mkdir -p $BUILD_DIR
 
 # Navigate into the build directory
-cd "$BUILD_DIR" || exit
+cd "$BUILD_DIR" || exit -1
 
 # Clean previous build artifacts
 rm -rf CMakeCache.txt CMakeFiles 
