@@ -10,7 +10,7 @@ cd "$BUILD_DIR" || exit -1
 
 # Clean previous build artifacts
 rm -rf CMakeCache.txt CMakeFiles 
-rm Testing tests WeatherDashboardApp_*
+rm -rf Testing tests WeatherDashboardApp_*
 
 # Run CMake to configure the project
 cmake ..
