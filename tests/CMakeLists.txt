@@ -1,5 +1,5 @@
 # Find all .cpp files in the tests directory
-file(GLOB TEST_SOURCES "*.cpp")
+file(GLOB TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}/**/*.cpp")
 
 # Create a test executable
 add_executable(test_WeatherDashboardApp ${TEST_SOURCES})

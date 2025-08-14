@@ -13,7 +13,7 @@ rm -rf CMakeCache.txt CMakeFiles
 rm -rf Testing tests WeatherDashboardApp_*
 
 # Run CMake to configure the project
-cmake ..
+cmake -DBUILD_TESTS=ON ..
 
 # Build the project
 make

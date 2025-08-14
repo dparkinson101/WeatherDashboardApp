@@ -8,7 +8,7 @@ rm -rf CMakeCache.txt CMakeFiles
 rm WeatherDashboardApp_*
 
 # Generate CMake Files
-cmake ..
+cmake -DBUILD_TESTS=OFF ..
 
 # Build Project
 make

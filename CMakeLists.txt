@@ -26,7 +26,7 @@ include_directories(${CMAKE_BINARY_DIR}/boost_install/include)
 link_directories(${CMAKE_BINARY_DIR}/boost_install/lib)
 
 # Add the source files
-file(GLOB SOURCES "src/*.cpp")
+file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp")
 
 # Create the executable
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
@@ -39,10 +39,7 @@ configure_file(
 )
 
 # Enable testing
-enable_testing()
-
-# Include tests
-add_subdirectory(tests)
-
-# Ensure the main executable depends on Boost
-add_dependencies(${EXECUTABLE_NAME} Boost)
+if (BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
