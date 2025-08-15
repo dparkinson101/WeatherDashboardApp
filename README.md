@@ -4,7 +4,7 @@
 Dependencies are managed by the CMake `ExternalProject` module so make sure this is enabled and then all dependencies should be downloaded and built automatically.
 
 ## Building & Testing
-This project untilises two shell scripts to build and test to project:
+This project untilises two shell scripts to build and test the project:
 `./build.sh`
 `./test.sh`
 
