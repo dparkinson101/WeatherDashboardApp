@@ -1,7 +1,12 @@
 # Weather Dashboard App
 
 ## Installing Dependencies:
-Dependencies are managed by the CMake `ExternalProject` module so make sure this is enabled and then all dependencies should be downloaded and built automatically.
+Dependencies are managed by vcpkg, if it is not already installed please do the following:
+```
+git clone https://github.com/microsoft/vcpkg.git $HOME/vcpkg
+cd $HOME/vcpkg && ./bootstrap-vcpkg.sh
+vcpkg integrate install
+```
 
 ## Building & Testing
 This project untilises two shell scripts to build and test the project:
