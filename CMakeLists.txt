@@ -13,18 +13,6 @@ include(ExternalProject)
 # Specify the include directories
 include_directories(include)
 
-# Download and build Boost
-ExternalProject_Add(
-    Boost
-    GIT_REPOSITORY https://github.com/boostorg/boost.git
-    GIT_TAG boost-1.88.0  # Specify the version you want
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/boost_install
-)
-
-# Specify the Boost include and library directories
-include_directories(${CMAKE_BINARY_DIR}/boost_install/include)
-link_directories(${CMAKE_BINARY_DIR}/boost_install/lib)
-
 # Add the source files
 file(GLOB SOURCES "src/*.cpp" "src/**/*.cpp")
 
