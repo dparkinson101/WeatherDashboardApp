@@ -22,10 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install CMake
-        uses: lukka/get-cmake@latest
-
-      - name: Install Linux build dependencies
+      - name: Install System Dependencies (Linux)
         if: matrix.os == 'linux'
         run: |
           sudo apt-get update
@@ -45,11 +42,12 @@ jobs:
             libxi-dev \
             libxkbcommon-dev \
             libxkbcommon-x11-dev \
-            libegl1-mesa-dev
+            libegl1-mesa-dev \
+            cmake
 
-      - name: Install Ninja on Windows
+      - name: Install System Dependencies (Windows)
         if: matrix.os == 'windows'
-        run: choco install ninja -y
+        run: choco install ninja cmake -y
 
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
