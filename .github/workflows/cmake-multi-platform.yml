@@ -12,10 +12,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - runner: [self-hosted, home-lab-runner]
+          - runner: [self-hosted, Linux]
             os: linux
             triplet: x64-linux
-          - runner: [self-hosted, home-lab-runner-windows]
+          - runner: [self-hosted, Windows]
             os: windows
             triplet: x64-windows
 
