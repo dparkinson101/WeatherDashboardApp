@@ -45,13 +45,6 @@ jobs:
             libegl1-mesa-dev \
             cmake
 
-      - name: Install System Dependencies (Windows)
-        if: matrix.os == 'windows'
-        run: |
-          Set-ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
-          choco install cmake ninja -y --installargs 'ADD_CMAKE_TO_PATH=System'
-
-
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
         with:
