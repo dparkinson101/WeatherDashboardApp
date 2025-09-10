@@ -1,0 +1,41 @@
+@startuml System Components
+scale 2
+left to right direction
+
+actor User
+
+database LocationAPI
+database WeatherAPI
+
+rectangle WeatherDashboardApp {
+    left to right direction
+
+    (LocationAPIModel)
+    (WeatherAPIModel)
+
+    package SearchBar {
+        User --> (SearchView)
+        (SearchView) -[hidden]-> (SearchViewModel)
+        (SearchViewModel) -[hidden]-> (LocationAPIModel)
+        (SearchViewModel) -[hidden]-> (WeatherAPIModel)
+
+        (SearchView) -> (SearchViewModel)
+        (SearchViewModel) -> (LocationAPIModel)
+        (LocationAPIModel) .> (SearchViewModel)
+        (SearchViewModel) -> (WeatherAPIModel)
+    }
+
+    package WeatherDisplay {
+        (WeatherAPIModel) -[hidden]-> (WeatherDisplayViewModel)
+        (WeatherDisplayViewModel) -[hidden]-> (WeatherGridView)
+
+        (WeatherAPIModel) .> (WeatherDisplayViewModel)
+        (WeatherDisplayViewModel) -> (WeatherGridView)
+        (WeatherDisplayViewModel) -> (WeatherCurrentView)
+    }
+}
+
+(LocationAPIModel) <-> (LocationAPI)
+(WeatherAPIModel) <-> (WeatherAPI)
+
+@enduml
