@@ -26,11 +26,12 @@ rectangle WeatherDashboardApp {
     }
 
     package WeatherDisplay {
-        (WeatherAPIModel) -[hidden]-> (WeatherGridViewModel)
-        (WeatherGridViewModel) -[hidden]-> (WeatherGridView)
+        (WeatherAPIModel) -[hidden]-> (WeatherDisplayViewModel)
+        (WeatherDisplayViewModel) -[hidden]-> (WeatherGridView)
 
-        (WeatherAPIModel) .> (WeatherGridViewModel)
-        (WeatherGridViewModel) -> (WeatherGridView)
+        (WeatherAPIModel) .> (WeatherDisplayViewModel)
+        (WeatherDisplayViewModel) -> (WeatherGridView)
+        (WeatherDisplayViewModel) -> (WeatherCurrentView)
     }
 }
 
