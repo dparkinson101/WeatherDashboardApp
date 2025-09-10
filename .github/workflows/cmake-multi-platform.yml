@@ -2,63 +2,25 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "fix-ci" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - runner: [self-hosted, Linux]
+            os: linux
             triplet: x64-linux
-          - os: windows-latest
+          - runner: [self-hosted, Windows]
+            os: windows
             triplet: x64-windows
 
     steps:
-      - name: Free up disk space
-        if: matrix.os == 'ubuntu-latest'
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 10240
-          swap-size-mb: 1024
-          remove-dotnet: true
-          remove-android: true
-          remove-haskell: true
-          remove-codeql: true
-    
       - uses: actions/checkout@v3
-
-      - name: Install CMake
-        uses: lukka/get-cmake@latest
-
-      - name: Install Linux build dependencies
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            build-essential \
-            ninja-build \
-            autoconf \
-            autoconf-archive \
-            automake \
-            libtool \
-            pkg-config \
-            libltdl-dev \
-            '^libxcb.*-dev' \
-            libx11-xcb-dev \
-            libglu1-mesa-dev \
-            libxrender-dev \
-            libxi-dev \
-            libxkbcommon-dev \
-            libxkbcommon-x11-dev \
-            libegl1-mesa-dev
-
-      - name: Install Ninja on Windows
-        if: runner.os == 'Windows'
-        run: choco install ninja -y
 
       - name: Setup vcpkg
         uses: lukka/run-vcpkg@v11
@@ -71,18 +33,23 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ runner.temp }}/vcpkg/packages
-          key: vcpkg-${{ runner.os }}-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json') }}
+          key: vcpkg-${{ matrix.os }}-${{ matrix.triplet }}-${{ hashFiles('vcpkg.json') }}
 
       - name: Cache CMake build
         uses: actions/cache@v3
         with:
           path: build
-          key: ${{ runner.os }}-build-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt') }}
+          key: ${{ matrix.os }}-build-${{ hashFiles('CMakeLists.txt', '**/CMakeLists.txt') }}
           restore-keys: |
-            ${{ runner.os }}-build-
+            ${{ matrix.os }}-build-
 
-      - name: Configure CMake
-        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.temp }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
+      - name: Configure CMake (Linux)
+        if: matrix.os == 'linux'
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.temp }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }} -DCMAKE_MAKE_PROGRAM=/usr/bin/ninja
+
+      - name: Configure CMake (Windows)
+        if: matrix.os == 'windows'
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON -DCMAKE_TOOLCHAIN_FILE=${{ runner.temp }}/vcpkg/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=${{ matrix.triplet }}
 
       - name: Build
         run: cmake --build build --config Release --parallel 2
